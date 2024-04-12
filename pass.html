@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول الصلوات اليومي</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #activitiesSection {
+            text-align: center;
+            padding: 20px;
+            background-color: #3e3e3e;
+            color: #fff;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 10px 0;
+            font-size: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        input[type="date"] {
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .prayer {
+            margin: 20px auto;
+            padding: 10px;
+            width: 80%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .prayer label {
+            font-size: 20px;
+        }
+
+        .attendance-options {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .prayer div {
+            margin-top: 10px;
+        }
+
+        /* Add your Islamic decorations here */
+        /* For example, background images, animations, etc. */
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #3e3e3e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<!-- صفحة تسجيل الدخول -->
+<div class="login-container">
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="username" placeholder="اسم المستخدم">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <button onclick="login()">تسجيل الدخول</button>
+    <p id="error-message" class="error-message" style="display: none;">اسم المستخدم أو كلمة المرور غير صحيحة.</p>
+</div>
+
+<div id="activitiesSection" style="display: none;">
+    <h1>جدول الصلوات اليومي</h1>
+    <label for="datePicker">اختر اليوم:</label>
+    <input type="date" id="datePicker" name="datePicker">
+</div>
+
+<script>
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("datePicker").setAttribute("max", today);
+
+    function login() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+    
+    // التحقق من صحة بيانات تسجيل الدخول لكلا المستخدمين
+    if ((username === "reda" && password === "123") || (username === "gimy" && password === "123")) {
+        document.getElementById("error-message").style.display = "none";
+        // عرض المحتوى بعد تسجيل الدخول
+        document.getElementById("activitiesSection").style.display = "block";
+        document.getElementsByClassName("login-container")[0].style.display = "none";
+
+        document.getElementById("registerButtonContainer").style.display = "block";
+
+        // عرض صلاة الفجر
+        document.getElementById("fajr-prayer").style.display = "block";
+        // عرض صلاة الظهر
+        document.getElementById("dhuhr-prayer").style.display = "block";
+        // عرض صلاة العصر
+        document.getElementById("asr-prayer").style.display = "block";
+        // عرض صلاة المغرب
+        document.getElementById("maghrib-prayer").style.display = "block";
+        // عرض صلاة العشاء
+        document.getElementById("isha-prayer").style.display = "block";
+    } else {
+        document.getElementById("error-message").style.display = "block";
+    }
+}
+
+
+    function toggleAttendance(prayerId) {
+        var attendanceSelect = document.getElementById(prayerId + '-attendance');
+        var detailsWrapper = document.getElementById(prayerId + '-details-wrapper');
+        var detailsSelect = document.getElementById(prayerId + '-details');
+        var qadaDetailsDiv = document.getElementById(prayerId + '-qada-details');
+
+        if (document.getElementById(prayerId).checked) {
+            detailsWrapper.style.display = 'block';
+            if (attendanceSelect.value === 'حاضر') {
+                detailsSelect.style.display = 'block';
+                qadaDetailsDiv.style.display = 'none';
+            } else if (attendanceSelect.value === 'قضاء') {
+                detailsSelect.style.display = 'none';
+                qadaDetailsDiv.style.display = 'block';
+            } else {
+                detailsSelect.style.display = 'none';
+                qadaDetailsDiv.style.display = 'none';
+            }
+        } else {
+            detailsWrapper.style.display = 'none';
+            detailsSelect.style.display = 'none';
+            qadaDetailsDiv.style.display = 'none';
+        }
+    }
+
+    function handleAttendance(prayerId, value) {
+        var detailsSelect = document.getElementById(prayerId + '-details');
+        var qadaDetailsDiv = document.getElementById(prayerId + '-qada-details');
+
+        if (value === 'حاضر') {
+            detailsSelect.style.display = 'block';
+            qadaDetailsDiv.style.display = 'none';
+        } else if (value === 'قضاء') {
+            detailsSelect.style.display = 'none';
+            qadaDetailsDiv.style.display = 'block';
+        } else {
+            detailsSelect.style.display = 'none';
+            qadaDetailsDiv.style.display = 'none';
+        }
+    }
+</script>
+
+<!-- صلاة الفجر -->
+<div class="prayer" id="fajr-prayer" style="display: none;">
+    <label><input type="checkbox" id="fajr" onchange="toggleAttendance('fajr')"> صلاة الفجر</label>
+    <div id="fajr-details-wrapper" style="display: none;">
+        <select id="fajr-attendance" class="attendance-options" onchange="handleAttendance('fajr', this.value)">
+            <option value="">اختر...</option>
+            <option value="حاضر">حاضر</option>
+            <option value="قضاء">قضاء</option>
+        </select>
+        <select id="fajr-details" class="attendance-options" style="display: none;">
+            <option value="جماعة المسجد">حاضر في جماعة المسجد</option>
+            <option value="جماعة المنزل">حاضر في جماعة المنزل</option>
+            <option value="بمفردك">حاضر بمفردك</option>
+        </select>
+        <div id="fajr-qada-details" style="display: none;">
+            <label for="fajr-qada-time">وقت القضاء:</label>
+            <input type="time" id="fajr-qada-time" name="fajr-qada-time">
+        </div>
+    </div>
+</div>
+
+<!-- صلاة الظهر -->
+<div class="prayer" id="dhuhr-prayer" style="display: none;">
+    <label><input type="checkbox" id="dhuhr" onchange="toggleAttendance('dhuhr')"> صلاة الظهر</label>
+    <div id="dhuhr-details-wrapper" style="display: none;">
+        <select id="dhuhr-attendance" class="attendance-options" onchange="handleAttendance('dhuhr', this.value)">
+            <option value="">اختر...</option>
+            <option value="حاضر">حاضر</option>
+            <option value="قضاء">قضاء</option>
+        </select>
+        <select id="dhuhr-details" class="attendance-options" style="display: none;">
+            <option value="جماعة المسجد">حاضر في جماعة المسجد</option>
+            <option value="جماعة المنزل">حاضر في جماعة المنزل</option>
+            <option value="بمفردك">حاضر بمفردك</option>
+        </select>
+        <div id="dhuhr-qada-details" style="display: none;">
+            <label for="dhuhr-qada-time">وقت القضاء:</label>
+            <input type="time" id="dhuhr-qada-time" name="dhuhr-qada-time">
+        </div>
+    </div>
+</div>
+
+<!-- صلاة العصر -->
+<div class="prayer" id="asr-prayer" style="display: none;">
+    <label><input type="checkbox" id="asr" onchange="toggleAttendance('asr')"> صلاة العصر</label>
+    <div id="asr-details-wrapper" style="display: none;">
+        <select id="asr-attendance" class="attendance-options" onchange="handleAttendance('asr', this.value)">
+            <option value="">اختر...</option>
+            <option value="حاضر">حاضر</option>
+            <option value="قضاء">قضاء</option>
+        </select>
+        <select id="asr-details" class="attendance-options" style="display: none;">
+            <option value="جماعة المسجد">حاضر في جماعة المسجد</option>
+            <option value="جماعة المنزل">حاضر في جماعة المنزل</option>
+            <option value="بمفردك">حاضر بمفردك</option>
+        </select>
+        <div id="asr-qada-details" style="display: none;">
+            <label for="asr-qada-time">وقت القضاء:</label>
+            <input type="time" id="asr-qada-time" name="asr-qada-time">
+        </div>
+    </div>
+</div>
+
+<!-- صلاة المغرب -->
+<div class="prayer" id="maghrib-prayer" style="display: none;">
+    <label><input type="checkbox" id="maghrib" onchange="toggleAttendance('maghrib')"> صلاة المغرب</label>
+    <div id="maghrib-details-wrapper" style="display: none;">
+        <select id="maghrib-attendance" class="attendance-options" onchange="handleAttendance('maghrib', this.value)">
+            <option value="">اختر...</option>
+            <option value="حاضر">حاضر</option>
+            <option value="قضاء">قضاء</option>
+        </select>
+        <select id="maghrib-details" class="attendance-options" style="display: none;">
+            <option value="جماعة المسجد">حاضر في جماعة المسجد</option>
+            <option value="جماعة المنزل">حاضر في جماعة المنزل</option>
+            <option value="بمفردك">حاضر بمفردك</option>
+        </select>
+        <div id="maghrib-qada-details" style="display: none;">
+            <label for="maghrib-qada-time">وقت القضاء:</label>
+            <input type="time" id="maghrib-qada-time" name="maghrib-qada-time">
+        </div>
+    </div>
+</div>
+
+<!-- صلاة العشاء -->
+<div class="prayer" id="isha-prayer" style="display: none;">
+    <label><input type="checkbox" id="isha" onchange="toggleAttendance('isha')"> صلاة العشاء</label>
+    <div id="isha-details-wrapper" style="display: none;">
+        <select id="isha-attendance" class="attendance-options" onchange="handleAttendance('isha', this.value)">
+            <option value="">اختر...</option>
+            <option value="حاضر">حاضر</option>
+            <option value="قضاء">قضاء</option>
+        </select>
+        <select id="isha-details" class="attendance-options" style="display: none;">
+            <option value="جماعة المسجد">حاضر في جماعة المسجد</option>
+            <option value="جماعة المنزل">حاضر في جماعة المنزل</option>
+            <option value="بمفردك">حاضر بمفردك</option>
+        </select>
+        <div id="isha-qada-details" style="display: none;">
+            <label for="isha-qada-time">وقت القضاء:</label>
+            <input type="time" id="isha-qada-time" name="isha-qada-time">
+        </div>
+    </div>
+</div>
+
+<div id="registerButtonContainer" style="display: none;">
+    <button id="registerButton" style="width: 50%; margin: 0 auto; display: block; padding: 10px; background-color: #3e3e3e; color: #fff; border: none; border-radius: 5px; cursor: pointer;" onclick="sendPrayerData()">تسجيل</button>
+</div>
+
+
+
+<script>
+    function sendPrayerData() {
+        var username = document.getElementById("username").value; // اسم المستخدم
+        var date = document.getElementById("datePicker").value; // التاريخ المختار
+    
+        // بناء الرسالة بإضافة معلومات الصلوات
+        var emailContent = "بيانات الصلوات للمستخدم: " + username + "، التاريخ: " + date + "\n";
+    
+        // جمع بيانات لكل صلاة
+        var prayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']; // أسماء الصلوات
+        prayers.forEach(function(prayer) {
+            var attendance = document.getElementById(prayer + "-attendance").value;
+            var details = document.getElementById(prayer + "-details").value;
+            var qadaTime = document.getElementById(prayer + "-qada-time").value;
+    
+            emailContent += "صلاة " + prayer + ": " + attendance;
+            if (attendance === "حاضر") {
+                emailContent += " - تفاصيل: " + details;
+            } else if (attendance === "قضاء") {
+                emailContent += " - وقت القضاء: " + qadaTime;
+            }
+            emailContent += "\n";
+        });
+    
+        // بناء عنوان URL لفتح نافذة بريد جديدة
+        var mailtoURL = "mailto:m.gamal.zaid1@gmail.com?subject=بيانات الصلوات&body=" + encodeURIComponent(emailContent);
+    
+        // فتح نافذة جديدة للبريد الإلكتروني
+        window.open(mailtoURL);
+    }
+    </script>
+    
+
+
+</body>
+</html>
